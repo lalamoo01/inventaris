@@ -10,9 +10,18 @@ class RuanganController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $ruangan = Ruangan::all();
+        $search = $request->search;
+
+        $ruangan = Ruangan::when($search, function ($query) use ($search) {
+        $query->orderByRaw("
+            CASE
+                WHEN jurusan LIKE ? THEN 1
+                ELSE 2
+            END
+        ", ['%' . $search . '%']);
+    })->get();
         return view('ruangan.index', compact('ruangan'));
     }
 
