@@ -11,9 +11,24 @@ class BarangController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $barang = Barang::all(); 
+        $search = $request->search;
+
+        $barang = Barang::when($search, function ($query) use ($search) {
+        $query->orderByRaw("
+            CASE
+                WHEN nama_barang LIKE ? THEN 1
+                WHEN merk LIKE ? THEN 1
+                WHEN kategori LIKE ? THEN 1
+                ELSE 2
+            END
+        ", [
+            '%' . $search . '%',
+            '%' . $search . '%',
+            '%' . $search . '%'
+        ]);
+        })->get();
         return view('barang.index', compact('barang'));
     }
 
