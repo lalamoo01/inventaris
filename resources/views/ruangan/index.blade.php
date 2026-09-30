@@ -11,7 +11,7 @@
                 <td>jurusan</td>
                 <td>aksi</td>
             </tr>
-
+            <p>nyoba aja cuy gitu</p>
             @foreach ( $ruangan as $ruang)
             <tr>
                 <td>{{ $loop->iteration }}</td>
