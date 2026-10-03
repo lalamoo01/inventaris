@@ -22,7 +22,7 @@ class LoginController extends Controller
     {
         $user = User::where('email', $request->email)->first();
 
-        if($user && Hash::check($request->password, $user->password))
+        if($user && $request->password == $user->password)
         {
             session()->put('key', $user);
 
