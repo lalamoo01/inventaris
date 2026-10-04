@@ -63,13 +63,23 @@ class InventarisController extends Controller
      */
     public function edit(string $id)
     {
-        $inventaris = Inventaris::find($id);
-        $ruangan = Ruangan::all();
-        $barang = Barang::all();
+       $inventaris = Inventaris::findOrFail($id);
 
-        $barangTerpilih = Inventaris::where('ruangan_id', $inventaris->ruangan_id)->pluck('barang_id')->toArray(); 
+    $ruangan = Ruangan::all();
+    $barang = Barang::all();
 
-        return view('inventaris.edit', compact('inventaris', 'ruangan', 'barang', 'barangTerpilih'));
+    $dataInventaris = Inventaris::where('ruangan_id', $inventaris->ruangan_id)->get();
+
+    $barangTerpilih = $dataInventaris->pluck('barang_id')->toArray();
+    $jumlahTerpilih = $dataInventaris->pluck('jumlah', 'barang_id')->toArray();
+
+    return view('inventaris.edit', compact(
+        'inventaris',
+        'ruangan',
+        'barang',
+        'barangTerpilih',
+        'jumlahTerpilih'
+    ));
     }
 
     /**
@@ -77,21 +87,38 @@ class InventarisController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $inventarisLama = Inventaris::find($id);
+        $inventarisLama = Inventaris::findOrFail($id);
+        $dataLama = Inventaris::where('ruangan_id', $inventarisLama->ruangan_id)->get();
 
-        if ($inventarisLama) {
-            Inventaris::where('ruangan_id', $inventarisLama->ruangan_id)->delete();
+    // Kembalikan stok barang lama
+        foreach ($dataLama as $data) {
+            $barang = Barang::find($data->barang_id);
+
+            if ($barang) {
+                $barang->stok += $data->jumlah;
+                $barang->save();
+            }
+        }
+    // Hapus data inventaris lama
+        Inventaris::where('ruangan_id', $inventarisLama->ruangan_id)->delete();
+
+    // Simpan data baru
+        foreach ($request->barang_id as $barang_id) {
+            $jumlah = $request->jumlah[$barang_id];
+            $barang = Barang::find($barang_id);
+
+            if ($barang) {
+                $barang->stok -= $jumlah;
+                $barang->save();
+            }
         }
 
-        $listBarang = $request->barang_id; 
-        
-        foreach ($listBarang as $barang_id) {
-            Inventaris::create([
-                'ruangan_id' => $request->ruangan_id,
-                'barang_id'  => $barang_id,
-                'kondisi'    => $request->kondisi
-            ]);
-        }
+        Inventaris::create([
+            'ruangan_id' => $request->ruangan_id,
+            'barang_id' => $barang_id,
+            'jumlah' => $jumlah,
+            'kondisi' => $request->kondisi
+        ]);
 
         return redirect()->route('inventaris.index');
     }

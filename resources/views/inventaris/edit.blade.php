@@ -34,41 +34,52 @@
         color: white;
     }
 </style>
+
 <div class="container-fluid">
     <h1 class="page-title">Edit Inventaris</h1>
     <p class="page-subtitle">Ubah data inventaris yang sudah tersedia</p>
+
     <div class="card p-5 form-card">
         <h3 class="text-center form-title">Form Edit Inventaris</h3>
+
         <form action="{{ route('inventaris.update', $inventaris->id) }}" method="POST">
             @csrf
             @method('PUT')
+
             <div class="mb-4">
                 <label class="form-label fw-bold">Pilih Ruangan</label>
                 <select name="ruangan_id" class="form-control" required>
                     <option value="">--- Pilih Ruangan ---</option>
                     @foreach($ruangan as $ruang)
-                    <option value="{{ $ruang->id }}">{{ $ruang->nama_ruangan }} ( {{ $ruang->jurusan }} )</option>
+                    <option value="{{ $ruang->id }}" {{ $inventaris->ruangan_id == $ruang->id ? 'selected' : '' }}>
+                        {{ $ruang->nama_ruangan }} ({{ $ruang->jurusan }})
+                    </option>
                     @endforeach
                 </select>
             </div>
+
             <div class="mb-4">
                 <label class="form-label fw-bold">Pilih Barang</label>
                 <div class="mt-2">
                     @foreach ($barang as $b)
-                    <div class="form-check mb-2">
-                        <input type="checkbox" name="barang_id[]" value="{{ $b->id }}" class="form-check-input"
-                            {{ in_array($b->id, $barangTerpilih) ? 'checked' : '' }}>
-                        <label class="form-check-label">
-                            {{ $b->nama_barang }} ({{ $b->merk }})
-                        </label>
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="form-check flex-grow-1">
+                            <input type="checkbox" name="barang_id[]" value="{{ $b->id }}" class="form-check-input" id="barang{{ $b->id }}" {{ in_array($b->id, $barangTerpilih) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="barang{{ $b->id }}">
+                                {{ $b->nama_barang }} ({{ $b->merk }})
+                            </label>
+                        </div>
+                        <input type="number" name="jumlah[{{ $b->id }}]" class="form-control" style="width: 100px;" min="1" placeholder="Jumlah" value="{{ $jumlahTerpilih[$b->id] ?? '' }}">
                     </div>
                     @endforeach
                 </div>
             </div>
+
             <div class="mb-4">
                 <label class="form-label fw-bold">Kondisi Barang</label>
                 <input type="text" name="kondisi" class="form-control" placeholder="Masukkan kondisi barang" value="{{ $inventaris->kondisi }}" required>
             </div>
+
             <button type="submit" class="btn btn-simpan">Simpan Perubahan</button>
         </form>
     </div>
