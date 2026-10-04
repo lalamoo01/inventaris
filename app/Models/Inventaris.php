@@ -9,6 +9,7 @@ class Inventaris extends Model
     protected $fillable = [
         'ruangan_id',
         'barang_id',
+        'jumlah',
         'kondisi'];
 
     public function ruangan() {

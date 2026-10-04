@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('ruangan_id')->constrained();
             $table->foreignId('barang_id')->constrained();
+            $table->string('jumlah');
             $table->string('kondisi');
             $table->timestamps();
         });

@@ -17,7 +17,7 @@
                     <select name="ruangan_id" class="form-select" required style="height: 45px; border-radius: 7px;">
                         <option value="">-- Pilih Ruangan --</option>
                         @foreach($ruangan as $ruang)
-                            <option value="{{ $ruang->id }}" >{{ $ruang->nama_ruangan }} ( {{ $ruang->jurusan }} )</option>
+                        <option value="{{ $ruang->id }}">{{ $ruang->nama_ruangan }} ( {{ $ruang->jurusan }} )</option>
                         @endforeach
                     </select>
                 </div>
@@ -25,10 +25,15 @@
                     <label class="form-label fw-semibold" style="color: #333;">Pilih Barang</label>
                     <div class="border rounded p-3" style="max-height: 220px; overflow-y: auto; background-color: #f8f9fa;">
                         @foreach ($barang as $b)
-                            <div class="form-check mb-2">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="form-check flex-grow-1">
                                 <input type="checkbox" name="barang_id[]" value="{{ $b->id }}" class="form-check-input" id="barang{{ $b->id }}">
-                                <label class="form-check-label" for="barang{{ $b->id }}">{{ $b->nama_barang }} ({{ $b->merk }})</label>
+                                <label class="form-check-label" for="barang{{ $b->id }}">
+                                    {{ $b->nama_barang }} ({{ $b->merk }})
+                                </label>
                             </div>
+                            <input type="number" name="jumlah[{{ $b->id }}]" class="form-control" style="width: 100px;" min="1" placeholder="Jumlah">
+                        </div>
                         @endforeach
                     </div>
                 </div>

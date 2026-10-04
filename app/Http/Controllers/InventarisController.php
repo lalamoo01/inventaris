@@ -14,7 +14,7 @@ class InventarisController extends Controller
      */
     public function index()
     {
-        $inventaris = Inventaris::with(['barang', 'ruangan'])->get();
+        $inventaris = Inventaris::with(['barang', 'ruangan'])->paginate(5);
         return view('inventaris.index', compact('inventaris'));
     }
 
@@ -35,12 +35,18 @@ class InventarisController extends Controller
     {
         $listBarang = $request->barang_id;
         foreach ($listBarang as $barang_id) {
-        Inventaris::create([
-            'ruangan_id' => $request->ruangan_id,
-            'barang_id' => $barang_id,
-            'kondisi' => $request->kondisi
-        ]);
+            $jumlah = $request->jumlah[$barang_id];
+            $barang = Barang::find($barang_id);
+            $barang->stok -= $jumlah;
+            $barang->save();
+                Inventaris::create([
+                'ruangan_id' => $request->ruangan_id,
+                'barang_id' => $barang_id,
+                'jumlah' => $jumlah,
+                'kondisi' => $request->kondisi
+                ]);
         }
+
         return redirect()->route('inventaris.index');
     }
 

@@ -1,4 +1,5 @@
 @extends('layout.layout')
+
 @section('content')
 <style>
     .page-title {
@@ -32,16 +33,19 @@
         border: none;
     }
 </style>
+
 <div class="container-fluid">
     <div>
         <h1 class="page-title">Daftar Inventaris</h1>
         <p class="page-subtitle">Data barang yang terdapat di setiap ruangan</p>
     </div>
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <a href="{{ route('inventaris.create') }}" class="btn btn-tambah">
             Tambah Inventaris
         </a>
     </div>
+
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -49,6 +53,7 @@
                 <th>Nama Ruangan</th>
                 <th>Nama Jurusan</th>
                 <th>Nama Barang</th>
+                <th>Jumlah</th>
                 <th>Kondisi</th>
                 <th>Aksi</th>
             </tr>
@@ -64,6 +69,11 @@
                         <div>{{ $item->barang->nama_barang }}</div>
                     @endforeach
                 </td>
+                <td>
+                    @foreach($i as $item)
+                        <div>{{ $item->jumlah }}</div>
+                    @endforeach
+                </td>
                 <td>{{ $i->first()->kondisi }}</td>
                 <td>
                     <a href="{{ route('inventaris.edit', $i->first()->id) }}" class="btn btn-edit">Edit</a>
@@ -77,5 +87,8 @@
             @endforeach
         </tbody>
     </table>
+    <div class="d-flex justify-content-center mt-4">
+        {{ $inventaris->links('pagination::bootstrap-5') }}
+    </div>
 </div>
 @endsection
