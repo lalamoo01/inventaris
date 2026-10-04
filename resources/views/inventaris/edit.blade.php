@@ -47,9 +47,7 @@
                 <select name="ruangan_id" class="form-control" required>
                     <option value="">--- Pilih Ruangan ---</option>
                     @foreach($ruangan as $ruang)
-                    <option value="{{ $ruang->id }}" {{ $inventaris->ruangan_id == $ruang->id ? 'selected' : '' }}>
-                        {{ $ruang->nama_ruangan }}
-                    </option>
+                    <option value="{{ $ruang->id }}">{{ $ruang->nama_ruangan }} ( {{ $ruang->jurusan }} )</option>
                     @endforeach
                 </select>
             </div>

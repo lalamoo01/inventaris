@@ -17,7 +17,7 @@
                     <select name="ruangan_id" class="form-select" required style="height: 45px; border-radius: 7px;">
                         <option value="">-- Pilih Ruangan --</option>
                         @foreach($ruangan as $ruang)
-                            <option value="{{ $ruang->id }}">{{ $ruang->nama_ruangan }}</option>
+                            <option value="{{ $ruang->id }}" >{{ $ruang->nama_ruangan }} ( {{ $ruang->jurusan }} )</option>
                         @endforeach
                     </select>
                 </div>
