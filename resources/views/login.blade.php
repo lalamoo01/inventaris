@@ -199,7 +199,7 @@
     <div class="left-side">
         <div class="left-content">
             <div class="school-name">SMKN 2 KRAKSAAN</div>
-            <h1>Selamat Datang!</h1>
+            <h1>Selamat Datang Admin!</h1>
             <h2>Sistem Informasi Inventaris Sekolah</h2>
             <p>Kelola data ruangan dan barang inventaris sekolah dengan lebih mudah dan teratur.</p>
         </div>
